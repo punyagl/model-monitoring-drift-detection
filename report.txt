@@ -1,0 +1,22 @@
+DATA DRIFT REPORT
+=================
+
+Column: hours_studied
+P-value: 0.1379
+No drift
+
+Column: attendance
+P-value: 0.0036
+Drift detected
+
+Column: previous_score
+P-value: 0.0115
+Drift detected
+
+=================
+SUMMARY
+=================
+
+Total features checked: 3
+Features with drift: 2
+Drift Score: 66.67%
