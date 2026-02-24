@@ -38,6 +38,16 @@ The system:
 ---
 
 ## Example Output
+Column: hours_studied
+P-value: 0.1379
+No drift
+Column: attendance
+P-value: 0.0036
+Drift detected
+Column: previous_score
+P-value: 0.0115
+Drift detected
+DRIFT SCORE: 66.67%
 
 ---
 
