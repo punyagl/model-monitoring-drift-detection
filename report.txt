@@ -3,15 +3,15 @@ DATA DRIFT REPORT
 
 Column: hours_studied
 P-value: 0.1379
-Status: No drift
+No drift
 
 Column: attendance
 P-value: 0.0036
-Status: Drift detected
+Drift detected
 
 Column: previous_score
 P-value: 0.0115
-Status: Drift detected
+Drift detected
 
 ====================
 DRIFT SCORE: 66.67%

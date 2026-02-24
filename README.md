@@ -1,26 +1,78 @@
-# 📊 ML Model Monitoring & Drift Detection Project
+# Model Monitoring and Drift Detection System
 
-## 📌 Overview
-This project detects **data drift** in machine learning models using statistical tests and generates:
+## Overview
 
-- Drift detection report
-- Drift summary score
-- Visualization graphs
-- Monitoring-ready pipeline
+This project implements a simple Machine Learning Model Monitoring system that detects data drift between reference data and current data using statistical methods.
 
-This is a real-world ML monitoring project used in production systems.
+Data drift occurs when the distribution of incoming data changes over time, which can reduce model performance. This system helps identify such changes early.
+
+This is a core component of real-world ML production systems.
 
 ---
 
-## 🚀 Features
+## Features
 
-✅ Data ingestion pipeline  
-✅ Drift detection using KS Test  
-✅ Drift summary score  
-✅ Automatic drift report generation  
-✅ Visualization graphs  
-✅ Modular Python structure  
+- Detects data drift using Kolmogorov-Smirnov statistical test
+- Calculates overall Drift Score
+- Generates visual distribution comparison plots
+- Automatically creates drift report
+- Clean modular Python project structure
+- Portfolio-ready project
 
 ---
 
-## 📂 Project Structure
+## Project Structure
+
+---
+
+## How It Works
+
+The system:
+
+1. Loads reference and current datasets
+2. Compares distributions using KS test
+3. Detects drift per feature
+4. Calculates overall Drift Score
+5. Generates plots and report
+
+---
+
+## Example Output
+
+---
+
+## Technologies Used
+
+- Python
+- Pandas
+- NumPy
+- SciPy
+- Matplotlib
+
+---
+
+## Why This Project Matters
+
+Model monitoring is essential in real-world ML systems used by companies like:
+
+- Netflix
+- Amazon
+- Google
+- Uber
+
+This project demonstrates understanding of ML production monitoring concepts.
+
+---
+
+## Future Improvements
+
+- Email alerts for drift
+- Dashboard visualization
+- Real-time monitoring
+- Integration with ML pipelines
+
+---
+
+## Author
+
+GitHub: https://github.com/punyagl
