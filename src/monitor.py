@@ -1,68 +1,66 @@
 import pandas as pd
-from scipy.stats import ks_2samp
 import os
 import matplotlib.pyplot as plt
+from scipy.stats import ks_2samp
 
 
 def load_data(path):
     return pd.read_csv(path)
 
 
-def plot_distribution(reference, current, column):
-
+def plot_distribution(reference, current, column, project_root):
     plt.figure()
 
-    plt.hist(reference[column], alpha=0.5, label="Reference", density=True)
-    plt.hist(current[column], alpha=0.5, label="Current", density=True)
+    plt.hist(reference[column], alpha=0.5, label="Reference")
+    plt.hist(current[column], alpha=0.5, label="Current")
 
-    plt.title(f"Distribution Comparison - {column}")
-    plt.xlabel(column)
-    plt.ylabel("Density")
+    plt.title(f"Distribution Comparison: {column}")
     plt.legend()
 
-    plt.show()
+    plots_dir = os.path.join(project_root, "plots")
+    os.makedirs(plots_dir, exist_ok=True)
+
+    plot_path = os.path.join(plots_dir, f"{column}.png")
+    plt.savefig(plot_path)
+    plt.close()
 
 
-def save_report(results, project_root, drift_score, total_features, drifted_features):
-
+def save_report(results, drift_score, project_root):
     report_path = os.path.join(project_root, "report.txt")
 
     with open(report_path, "w") as f:
 
         f.write("DATA DRIFT REPORT\n")
-        f.write("=================\n\n")
+        f.write("====================\n\n")
 
         for result in results:
             f.write(f"Column: {result['column']}\n")
             f.write(f"P-value: {result['p_value']:.4f}\n")
-            f.write(f"{result['status']}\n\n")
+            f.write(f"Status: {result['status']}\n\n")
 
-        f.write("=================\n")
-        f.write("SUMMARY\n")
-        f.write("=================\n\n")
+        f.write("====================\n")
+        f.write(f"DRIFT SCORE: {drift_score:.2f}%\n")
 
-        f.write(f"Total features checked: {total_features}\n")
-        f.write(f"Features with drift: {drifted_features}\n")
-        f.write(f"Drift Score: {drift_score:.2f}%\n")
-
-    print(f"\nReport saved at: {report_path}")
+    print("Report saved at:", report_path)
 
 
 def detect_drift(reference, current, project_root, threshold=0.05):
 
-    feature_columns = reference.columns.drop("pass")
-
     results = []
-
     drift_count = 0
-    total_features = len(feature_columns)
+    total_columns = 0
 
-    for column in feature_columns:
+    for column in reference.columns:
 
-        stat, p_value = ks_2samp(reference[column], current[column])
+        if column == "pass":
+            continue
 
-        print(f"\nColumn: {column}")
-        print(f"P-value: {p_value:.4f}")
+        total_columns += 1
+
+        ref_values = reference[column]
+        curr_values = current[column]
+
+        statistic, p_value = ks_2samp(ref_values, curr_values)
 
         if p_value < threshold:
             status = "Drift detected"
@@ -70,6 +68,8 @@ def detect_drift(reference, current, project_root, threshold=0.05):
         else:
             status = "No drift"
 
+        print("\nColumn:", column)
+        print("P-value:", round(p_value, 4))
         print(status)
 
         results.append({
@@ -78,16 +78,13 @@ def detect_drift(reference, current, project_root, threshold=0.05):
             "status": status
         })
 
-        plot_distribution(reference, current, column)
+        plot_distribution(reference, current, column, project_root)
 
-    drift_score = (drift_count / total_features) * 100
+    drift_score = (drift_count / total_columns) * 100
 
-    print("\n========== SUMMARY ==========")
-    print(f"Total features: {total_features}")
-    print(f"Drifted features: {drift_count}")
-    print(f"Drift Score: {drift_score:.2f}%")
+    print("\nDRIFT SCORE:", round(drift_score, 2), "%")
 
-    save_report(results, project_root, drift_score, total_features, drift_count)
+    save_report(results, drift_score, project_root)
 
 
 if __name__ == "__main__":
